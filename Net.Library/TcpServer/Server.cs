@@ -86,7 +86,6 @@ namespace SomeProject.Library.Server
                     }
                     SendMessageToClient(stream, res);
                 }
-           //     client.Close();
                 return new OperationResult(Result.OK, res);
             }
             catch (Exception e)
@@ -137,12 +136,11 @@ namespace SomeProject.Library.Server
                 using (FileStream fstream = new FileStream(path, FileMode.Create))
                 {
                     fstream.Write(data, index + 1, bytes - index - 1);
-                    do
+                    while (stream.DataAvailable)
                     {
                         bytes = stream.Read(data, 0, data.Length);
                         fstream.Write(data, 0, bytes);
                     }
-                    while (stream.DataAvailable);
                 }
                 return new OperationResult(Result.OK, "File: " + path);
             }
